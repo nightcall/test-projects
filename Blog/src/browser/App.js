@@ -6,19 +6,19 @@ import PostList from './PostList';
 import Post from './Post';
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-	}
+    constructor(props) {
+        super(props);
+    }
 
-	render() {
-		return(
-			<Switch>
-				<Route exact path='/' component={PostList} />
-				<Route exact path='/post/:postId' component={Post} />
-				<Route component={RouteError} />
-			</Switch>
-		);
-	}
+    render() {
+        return(
+            <Switch>
+                <Route exact path='/' component={PostList} />
+                <Route exact path='/post/:postId' component={Post} />
+                <Route component={RouteError} />
+            </Switch>
+        );
+    }
 }
 
 export default App;

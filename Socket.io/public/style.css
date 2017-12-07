@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    overflow: hidden;
+}
+
+#login-bar {
+    width: 100%;
+    height: 50px;
+    padding-left: 13px;
+    background-color: #1B2630;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login-bar input {
+    margin-right: 13px;
+    border: none;
+    height: 24px;
+    width: 150px;
+    padding-left: 5px;
+    color: grey;
+}
+
+#login-bar button {
+    width: 75px;
+    height: 24px;
+    font-size: 15px;
+    margin: auto;
+    background-color: grey;
+    color: white;
+    border: none;
+}
+
+#login-bar h3 {
+    margin-right: 30px;
+    color: white;
+}
+
+.italic {
+    font-style: italic;
+}
+
+#container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: row;
+    height: 80%;
+}
+
+#chat-messages div:first-child {
+    overflow-y: scroll;
+    width: 75%;
+}
+
+#chat-messages div:first-child p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 30px;
+}
+
+#chat-messages div:last-child {
+    padding: 20px;
+}
+
+#chat-messages div:last-child h5 {
+    font-size: 20px;
+    color: red;
+}
+
+#chat-input {
+    background-color: #1B2630;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#chat-input textarea {
+    background-color: white;
+    width: 300px;
+    height: 70%;
+    border: none;
+    padding: 5px;
+}
+
+#chat-input button {
+    width: 50px;
+    height: 50px;
+    margin-left: 20px;
+    border: none;
+    background-color: LightSeaGreen;
+    font-family: arial;
+    color: white;
+}
+
+#chat-input p {
+    color: white;
+    font-size: 15px;
+    font-family: arial;
+    margin-left: 10px;
+}
