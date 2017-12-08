@@ -12,12 +12,12 @@ db.addUser({username: 'jon', password: '1234'});
 db.addUser({username: 'sara', password: '1234'});
 db.addUser({username: 'clementine', password: '1234'});
 
-db.addPost('jon', 'Hey feelin gr8 today :) and u ?');
-db.addPost('sara', 'YEAAAAAAAAAAAAH !!!!!! (L)');
-db.addPost('jon', 'A fond les ballons wesh');
-db.addComment(2, 'sara', 'vazy mais ferme ta gueule aussi');
-db.addComment(2, 'jon', 'jalouse ?');
-db.addComment(2, 'sara', 'ke dalle t un boloss c tou');
+// db.addPost('jon', 'Hey feelin gr8 today :) and u ?');
+// db.addPost('sara', 'YEAAAAAAAAAAAAH !!!!!! (L)');
+// db.addPost('jon', 'A fond les ballons wesh');
+// db.addComment(2, 'sara', 'vazy mais ferme ta gueule aussi');
+// db.addComment(2, 'jon', 'jalouse ?');
+// db.addComment(2, 'sara', 'ke dalle t un boloss c tou');
 
 
 /*** SET UP ***/
@@ -41,7 +41,10 @@ app.use(session({
 
 /* LOGIN */
 app.post('/login', (req, res) => {
-    let logged = false;
+    let log = {
+        logged: false,
+        username: 'Error'
+    };
 
     const {
         username,
@@ -52,18 +55,19 @@ app.post('/login', (req, res) => {
         const user = db.users.find(u => u.username == username
             && u.password == password);
 
-        if(user != 'undefined') {
-            logged = true;
+        if(user != undefined) {
+            log.logged = true;
+            log.username = username;
             req.session.userID = user.id;
         }
     }
 
-    if(logged) console.log(`${username} logged in successfully !`);
+    if(log.logged) console.log(`${username} logged in successfully !`);
     else console.log(`${username} failed to log in...`);
 
     // Send Auth
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({logged: logged}));
+    res.send(JSON.stringify(log));
 });
 
 /* LOGOUT */
@@ -98,8 +102,31 @@ app.post('/newsfeed', (req, res) => {
     }
 });
 
-/*** TESTING ZONE ***/
+/* COMMENT */
+app.post('/comment', (req, res) => {
+    if(req.session.userID != 'undefined') {
+        const user = db.getUserFromID(req.session.userID);
 
+        if(user != undefined) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(db.addComment(req.body.postID, user.username, req.body.comment)));
+        }
+    }
+});
+
+/* ADD POST */
+app.post('/post', (req, res) => {
+    if(req.session.userID != 'undefined') {
+        const user = db.getUserFromID(req.session.userID);
+
+        if(user != undefined) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(db.addPost(user.username, req.body.post)));
+        }
+    }
+});
+
+/*** TESTING ZONE ***/
 
 /*** REQUESTS ***/
 app.use((req, res) => {

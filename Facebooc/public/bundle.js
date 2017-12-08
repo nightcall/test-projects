@@ -23413,8 +23413,6 @@ var App = function (_React$Component) {
                 })
             }).then(function (data) {
                 return data.json();
-            }).then(function (auth) {
-                return auth.logged;
             });
         }
     }, {
@@ -23425,8 +23423,8 @@ var App = function (_React$Component) {
                 credentials: 'same-origin'
             }).then(function (data) {
                 return data.json();
-            }).then(function (auth) {
-                return auth.logged;
+            }).then(function (log) {
+                return log.logged;
             });
         }
     }, {
@@ -23447,8 +23445,11 @@ var App = function (_React$Component) {
         value: function handleLogin(username, password) {
             var _this3 = this;
 
-            this.login(username, password).then(function (isLoggedIn) {
-                _this3.setState({ isLoggedIn: isLoggedIn });
+            this.login(username, password).then(function (log) {
+                _this3.setState({
+                    isLoggedIn: log.logged,
+                    username: log.username
+                });
             });
         }
     }, {
@@ -23458,13 +23459,15 @@ var App = function (_React$Component) {
 
             this.logout().then(function (isLoggedIn) {
                 console.log(isLoggedIn);
-                _this4.setState({ isLoggedIn: isLoggedIn });
+                _this4.setState({ isLoggedIn: false });
             });
         }
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(_MasterPage2.default, { isLoggedIn: this.state.isLoggedIn,
+            return _react2.default.createElement(_MasterPage2.default, {
+                isLoggedIn: this.state.isLoggedIn,
+                username: this.state.username,
                 hasAuth: this.state.hasAuth,
                 onLogin: this.handleLogin,
                 onLogout: this.handleLogout });
@@ -23538,6 +23541,7 @@ var MasterPage = function (_React$Component) {
         value: function render() {
             var _props = this.props,
                 isLoggedIn = _props.isLoggedIn,
+                username = _props.username,
                 hasAuth = _props.hasAuth,
                 onLogin = _props.onLogin,
                 onLogout = _props.onLogout;
@@ -23548,7 +23552,9 @@ var MasterPage = function (_React$Component) {
                     return _react2.default.createElement(
                         'div',
                         { id: 'container' },
-                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
+                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout,
+                            username: username,
+                            isLoggedIn: isLoggedIn }),
                         _react2.default.createElement(
                             _reactRouterDom.Switch,
                             null,
@@ -23560,7 +23566,9 @@ var MasterPage = function (_React$Component) {
                     return _react2.default.createElement(
                         'div',
                         { id: 'container' },
-                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
+                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout,
+                            username: username,
+                            isLoggedIn: isLoggedIn }),
                         _react2.default.createElement(_LoginPage2.default, { onLogin: onLogin })
                     );
                 }
@@ -23568,7 +23576,9 @@ var MasterPage = function (_React$Component) {
                 return _react2.default.createElement(
                     'div',
                     { id: 'container' },
-                    _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
+                    _react2.default.createElement(_Banner2.default, { onLogout: onLogout,
+                        username: username,
+                        isLoggedIn: isLoggedIn }),
                     _react2.default.createElement(_LoadingPage2.default, null)
                 );
             }
@@ -23610,19 +23620,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SubmitPost = function SubmitPost(props) {
-    return _react2.default.createElement(
-        'form',
-        { id: 'submitpost' },
-        _react2.default.createElement('textarea', { placeholder: 'How are you feeling today ?' }),
-        _react2.default.createElement(
-            'button',
-            null,
-            'Submit !'
-        )
-    );
-};
-
 var Home = function (_React$Component) {
     _inherits(Home, _React$Component);
 
@@ -23634,15 +23631,53 @@ var Home = function (_React$Component) {
         _this.state = {
             isLoading: true,
             canLoadMore: true,
+            post: '',
             posts: []
         };
+
+        _this.handleChange = _this.handleChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
         return _this;
     }
 
     _createClass(Home, [{
+        key: 'handleChange',
+        value: function handleChange(event) {
+            this.setState({ post: event.target.value });
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(event) {
+            var _this2 = this;
+
+            event.preventDefault();
+
+            if (!this.state.post) return;
+
+            fetch('/post', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                credentials: 'same-origin',
+                body: JSON.stringify({ post: this.state.post })
+            }).then(function (data) {
+                return data.json();
+            }).then(function (post) {
+                _this2.setState(function (prevState) {
+                    var state = prevState;
+                    state.post = '';
+                    state.posts.unshift(post);
+
+                    return state;
+                });
+            });
+        }
+    }, {
         key: 'getNewsFeed',
         value: function getNewsFeed() {
-            var _this2 = this;
+            var _this3 = this;
 
             return fetch('/newsfeed', {
                 headers: {
@@ -23658,7 +23693,7 @@ var Home = function (_React$Component) {
             }).then(function (data) {
                 return data.json();
             }).then(function (results) {
-                _this2.setState(function (prevState) {
+                _this3.setState(function (prevState) {
                     var state = prevState;
                     state.posts = state.posts.concat(results.posts);
                     state.canLoadMore = results.canLoadMore;
@@ -23683,7 +23718,18 @@ var Home = function (_React$Component) {
                     null,
                     'My Newsfeed'
                 ),
-                _react2.default.createElement(SubmitPost, null),
+                _react2.default.createElement(
+                    'form',
+                    { id: 'submitpost', onSubmit: this.handleSubmit },
+                    _react2.default.createElement('textarea', { placeholder: 'How are you feeling today ?',
+                        onChange: this.handleChange,
+                        value: this.state.post }),
+                    _react2.default.createElement(
+                        'button',
+                        null,
+                        'Submit !'
+                    )
+                ),
                 this.state.posts.map(function (p, i) {
                     return _react2.default.createElement(_Post2.default, { data: p, key: p.id });
                 })
@@ -23747,7 +23793,8 @@ var Post = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
 
         _this.state = {
-            comment: ''
+            comment: '',
+            comments: _this.props.data.comments
         };
 
         _this.handleSubmitComment = _this.handleSubmitComment.bind(_this);
@@ -23758,10 +23805,35 @@ var Post = function (_React$Component) {
     _createClass(Post, [{
         key: 'handleSubmitComment',
         value: function handleSubmitComment(event) {
+            var _this2 = this;
+
             event.preventDefault();
 
             /* SUBMIT COMMENT TODO */
-            window.alert('Posted a comment:\'' + this.state.comment + '\'');
+            if (!this.state.comment) return;
+
+            fetch('/comment', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    postID: this.props.data.id,
+                    comment: this.state.comment
+                })
+            }).then(function (data) {
+                return data.json();
+            }).then(function (comment) {
+                _this2.setState(function (prevState) {
+                    var state = prevState;
+                    state.comment = '';
+                    state.comments.push(comment);
+
+                    return state;
+                });
+            });
         }
     }, {
         key: 'handleCommentChange',

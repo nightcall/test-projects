@@ -14,6 +14,10 @@ Database.prototype.getUser = function(username) {
     return this.users.find(user => user.username == username);
 }
 
+Database.prototype.getUserFromID = function(uID) {
+    return this.users.find(user => user.id == uID);
+}
+
 Database.prototype.getPostIndex = function(pID) {
     return this.posts.findIndex(post => post.id == pID);
 }
@@ -36,13 +40,16 @@ Database.prototype.addPost = function(u, p) {
         return;
     }
 
-    this.posts.push({
+    let newPost = {
         id: Database.counter.posts++,
         user: user,
         content: p,
         date: Date.now(),
         comments: []
-    });
+    };
+
+    this.posts.push(newPost);
+    return newPost;
 }
 
 Database.prototype.addComment = function(pID, u, c) {
@@ -55,12 +62,16 @@ Database.prototype.addComment = function(pID, u, c) {
         return;
     }
 
-    this.posts[postIndex].comments.push({
+    const newComment = {
         id: Database.counter.comments++,
         user: user,
         content: c,
         date: Date.now()
-    });
+    };
+
+    this.posts[postIndex].comments.push(newComment);
+
+    return newComment;
 }
 
 Database.prototype.getUserPosts = function(u) {

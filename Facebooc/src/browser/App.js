@@ -38,8 +38,7 @@ export default class App extends React.Component {
                 password: password
             })
         })
-        .then(data => data.json())
-        .then(auth => auth.logged);
+        .then(data => data.json());
     }
 
     logout() {
@@ -48,7 +47,7 @@ export default class App extends React.Component {
             credentials: 'same-origin'
         })
         .then(data => data.json())
-        .then(auth => auth.logged);
+        .then(log => log.logged);
     }
 
     componentWillMount() {
@@ -61,21 +60,26 @@ export default class App extends React.Component {
     }
 
     handleLogin(username, password) {
-        this.login(username, password).then(isLoggedIn => {
-            this.setState({isLoggedIn: isLoggedIn});
+        this.login(username, password).then(log => {
+            this.setState({
+                isLoggedIn: log.logged,
+                username: log.username
+            });
         });
     }
 
     handleLogout() {
         this.logout().then(isLoggedIn => {
             console.log(isLoggedIn);
-            this.setState({isLoggedIn: isLoggedIn});
+            this.setState({isLoggedIn: false});
         });
     }
 
     render() {
         return (
-            <MasterPage isLoggedIn={this.state.isLoggedIn}
+            <MasterPage
+                isLoggedIn={this.state.isLoggedIn}
+                username={this.state.username}
                 hasAuth={this.state.hasAuth}
                 onLogin={this.handleLogin}
                 onLogout={this.handleLogout} />

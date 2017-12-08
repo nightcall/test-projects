@@ -16,7 +16,8 @@ export default class Post extends React.Component {
         super(props);
 
         this.state = {
-            comment: ''
+            comment: '',
+            comments: this.props.data.comments
         };
 
         this.handleSubmitComment = this.handleSubmitComment.bind(this);
@@ -27,7 +28,31 @@ export default class Post extends React.Component {
         event.preventDefault();
 
         /* SUBMIT COMMENT TODO */
-        window.alert(`Posted a comment:'${this.state.comment}'`);
+        if(!this.state.comment)
+            return;
+
+        fetch('/comment', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                postID: this.props.data.id,
+                comment: this.state.comment
+            })
+        })
+        .then(data => data.json())
+        .then(comment => {
+            this.setState(prevState => {
+                let state = prevState;
+                state.comment = '';
+                state.comments.push(comment);
+
+                return state;
+            });
+        });
     }
 
     handleCommentChange(event) {

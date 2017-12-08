@@ -15,6 +15,7 @@ export default class MasterPage extends React.Component {
     render() {
         const { 
             isLoggedIn,
+            username,
             hasAuth,
             onLogin,
             onLogout
@@ -25,7 +26,9 @@ export default class MasterPage extends React.Component {
             if(isLoggedIn) {
                 return (
                     <div id='container'>
-                        <Banner onLogout={onLogout} isLoggedIn={isLoggedIn} />
+                        <Banner onLogout={onLogout}
+                            username={username}
+                            isLoggedIn={isLoggedIn} />
                         <Switch>
                             <Route exact path='/' component={Home} />
                             <Route component={WrongPath} />
@@ -35,7 +38,9 @@ export default class MasterPage extends React.Component {
             } else {
                 return (
                     <div id='container'>
-                        <Banner onLogout={onLogout} isLoggedIn={isLoggedIn} />
+                        <Banner onLogout={onLogout}
+                            username={username}
+                            isLoggedIn={isLoggedIn} />
                         <LoginPage onLogin={onLogin} />
                     </div>
                 );
@@ -43,7 +48,9 @@ export default class MasterPage extends React.Component {
         } else {
             return (
                 <div id='container'>
-                    <Banner onLogout={onLogout} isLoggedIn={isLoggedIn} />
+                    <Banner onLogout={onLogout}
+                        username={username}
+                        isLoggedIn={isLoggedIn} />
                     <LoadingPage />
                 </div>
             );
