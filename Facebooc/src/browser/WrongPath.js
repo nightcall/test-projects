@@ -1,5 +1,4 @@
 import React from 'react';
-import staticBanner from './StaticBanner';
 
 export default class WrongPath extends React.Component {
     constructor(props) {
@@ -7,11 +6,6 @@ export default class WrongPath extends React.Component {
     }
 
     render() {
-        return(
-            <div id='container'>
-                {staticBanner()}
-                <h1>404 Not found</h1>
-            </div>
-        );
+        return <h1>404 Not found</h1>;
     }
 }

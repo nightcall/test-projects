@@ -1,5 +1,4 @@
 import React from 'react';
-import staticBanner from './StaticBanner';
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -44,18 +43,15 @@ export default class LoginPage extends React.Component {
 
     render() {
         return(
-            <div id='container'>
-                {staticBanner()}
-                <div id='login'>
-                    <form onSubmit={this.handleSubmit} >
-                        <input placeholder='Username'
-                                onChange={this.handleUsernameChange}
-                                ref={input => this.inputRef = input} />
-                        <input placeholder='Password'
-                                onChange={this.handlePasswordChange} />
-                        <button>Log in</button>
-                    </form>
-                </div>
+            <div id='login'>
+                <form onSubmit={this.handleSubmit} >
+                    <input placeholder='Username'
+                            onChange={this.handleUsernameChange}
+                            ref={input => this.inputRef = input} />
+                    <input placeholder='Password'
+                            onChange={this.handlePasswordChange} />
+                    <button>Log in</button>
+                </form>
             </div>
         );
     }

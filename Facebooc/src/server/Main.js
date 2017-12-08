@@ -79,6 +79,20 @@ app.post('/auth', (req, res) => {
     }));
 });
 
+/* NEWSFEED */
+app.post('/newsfeed', (req, res) => {
+    if(req.session.userID != 'undefined') {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({
+            posts: userDB.users[0].posts,
+            canLoadMore: true
+        }));
+    }
+});
+
+/*** TESTING ZONE ***/
+console.log(userDB.users[0].posts[0].comments);
+
 /*** REQUESTS ***/
 app.use((req, res) => {
     res.render('layout.pug');

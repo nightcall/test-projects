@@ -1,10 +1,7 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 
-import Home from './Home';
-import WrongPath from './WrongPath';
-import LoginPage from './LoginPage';
-import LoadingPage from './LoadingPage';
+import MasterPage from './MasterPage';
+import Banner from './Banner';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -49,7 +46,9 @@ export default class App extends React.Component {
         return fetch('/logout', {
             method: 'post',
             credentials: 'same-origin'
-        });
+        })
+        .then(data => data.json())
+        .then(auth => auth.logged);
     }
 
     componentWillMount() {
@@ -67,40 +66,21 @@ export default class App extends React.Component {
         });
     }
 
-    handleLogout(username, password) {
+    handleLogout() {
         this.logout().then(isLoggedIn => {
+            console.log(isLoggedIn);
             this.setState({isLoggedIn: isLoggedIn});
         });
     }
 
     render() {
-        const { 
-            isLoggedIn,
-            hasAuth
-        } = this.state;
-
         return(
-            static banner component handlelogout={}
-            if auth
-                if log
-                    switch principal
-                else
-                    logpage
+            <div id='container'>
+                <Banner onLogout={this.handleLogout} isLoggedIn={this.state.isLoggedIn} />
+                <MasterPage isLoggedIn={this.state.isLoggedIn}
+                    hasAuth={this.state.hasAuth}
+                    onLogin={this.handleLogin} />
+            </div>
         );
-
-        if(hasAuth) {
-            if(isLoggedIn) {
-                return(
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route component={WrongPath} />
-                    </Switch>
-                );
-            } else {
-                return <LoginPage onLogin={this.handleLogin} />
-            }
-        } else {
-            return <LoadingPage />;
-        }
     }
 };

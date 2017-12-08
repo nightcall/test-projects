@@ -27,7 +27,7 @@ UserDatabase.prototype.addUser = function(u) {
         this.users[this.users.length - 1].posts.push({
             id: UserDatabase.counter.posts++,
             date: Date.now(),
-            text: '[' + this.users[this.users.length - 1].username + '] Post no ' + i,
+            text: '[' + this.users[this.users.length - 1].username + '] Feeling gr8 today ! How about u ? - ' + i,
             comments: []
         });
 
@@ -36,7 +36,7 @@ UserDatabase.prototype.addUser = function(u) {
             this.users[this.users.length - 1].posts[i].comments.push({
                 id: UserDatabase.counter.comments++,
                 userId: getRandomInt(0, this.users.length),
-                text: 'Comment id=' + UserDatabase.counter.comments
+                text: 'Random comment LOL - ' + UserDatabase.counter.comments
             });
         }
     }
