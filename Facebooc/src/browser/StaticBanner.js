@@ -5,6 +5,7 @@ export default () => {
     return(
         <div id='banner'>
             <h1><Link to='/'>Facebooc</Link></h1>
+            <h3></h3>
         </div>
     );
 };

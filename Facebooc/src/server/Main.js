@@ -31,6 +31,54 @@ app.use(session({
     saveUninitialized: false
 }));
 
+/* LOGIN */
+app.post('/login', (req, res) => {
+    let logged = false;
+
+    const {
+        username,
+        password
+    } = req.body;
+
+    if(username && password) {
+        userDB.users.forEach(u => {
+            if(u.username == username
+            && u.password == password) {
+                logged = true;
+                req.session.userID = u.id;
+            }
+        });
+    }
+
+    if(logged) console.log(`${username} logged in successfully !`);
+    else console.log(`${username} failed to log in...`);
+
+    // Send Auth
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({logged: logged}));
+});
+
+/* LOGOUT */
+app.post('/logout', (req, res) => {
+    req.session.destroy();
+    console.log('someone logged out');
+
+    // Send Auth
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({logged: false}));
+});
+
+/* AM I LOGGED IN OR NOT ? */
+app.post('/auth', (req, res) => {
+
+    // Send Auth
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+        logged: (typeof req.session != 'undefined'
+                && typeof req.session.userID != 'undefined')
+    }));
+});
+
 /*** REQUESTS ***/
 app.use((req, res) => {
     res.render('layout.pug');

@@ -57,3 +57,26 @@
     margin-bottom: 5px;
     padding: 5px;
 }
+
+/*** LOADING PAGE ***/
+#loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+#loading img {
+    animation: rotate 2s infinite linear;
+    width: 50px;
+    height: 50px;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+}

@@ -6,20 +6,40 @@ export default class LoginPage extends React.Component {
         super(props);
 
         this.state = {
-            pendingUsername: '',
-            pendingPassword: ''
+            username: '',
+            password: ''
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.inputRef.focus();
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const {
+            username,
+            password
+        } = this.state;
+
+        if(username && password) {
+
+            /* LOG IN EVENT */
+            this.props.onLogin(username, password);
+        }
     }
 
     handleUsernameChange(event) {
-        this.setState({pendingUsername: event.target.value});
+        this.setState({username: event.target.value});
     }
 
     handlePasswordChange(event) {
-        this.setState({pendingPassword: event.target.value});
+        this.setState({password: event.target.value});
     }
 
     render() {
@@ -27,9 +47,10 @@ export default class LoginPage extends React.Component {
             <div id='container'>
                 {staticBanner()}
                 <div id='login'>
-                    <form>
+                    <form onSubmit={this.handleSubmit} >
                         <input placeholder='Username'
-                                onChange={this.handleUsernameChange} />
+                                onChange={this.handleUsernameChange}
+                                ref={input => this.inputRef = input} />
                         <input placeholder='Password'
                                 onChange={this.handlePasswordChange} />
                         <button>Log in</button>

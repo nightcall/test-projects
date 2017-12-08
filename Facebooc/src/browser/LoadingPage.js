@@ -1,7 +1,7 @@
 import React from 'react';
 import staticBanner from './StaticBanner';
 
-export default class WrongPath extends React.Component {
+export default class LoginPage extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -10,7 +10,9 @@ export default class WrongPath extends React.Component {
         return(
             <div id='container'>
                 {staticBanner()}
-                <h1>404 Not found</h1>
+                <div id='loading'>
+                   <img src='/loading.svg' alt='loading...' />
+                </div>
             </div>
         );
     }
