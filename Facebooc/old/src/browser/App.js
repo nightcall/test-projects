@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MasterPage from './MasterPage';
+import Banner from './Banner';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -8,7 +9,6 @@ export default class App extends React.Component {
 
         this.state = {
             isLoggedIn: false,
-            username: '',
             hasAuth: false
         };
 
@@ -74,11 +74,13 @@ export default class App extends React.Component {
     }
 
     render() {
-        return (
-            <MasterPage isLoggedIn={this.state.isLoggedIn}
-                hasAuth={this.state.hasAuth}
-                onLogin={this.handleLogin}
-                onLogout={this.handleLogout} />
+        return(
+            <div id='container'>
+                <Banner onLogout={this.handleLogout} isLoggedIn={this.state.isLoggedIn} />
+                <MasterPage isLoggedIn={this.state.isLoggedIn}
+                    hasAuth={this.state.hasAuth}
+                    onLogin={this.handleLogin} />
+            </div>
         );
     }
 };

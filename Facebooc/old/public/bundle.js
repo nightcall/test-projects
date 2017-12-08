@@ -23358,6 +23358,10 @@ var _MasterPage = __webpack_require__(76);
 
 var _MasterPage2 = _interopRequireDefault(_MasterPage);
 
+var _Banner = __webpack_require__(81);
+
+var _Banner2 = _interopRequireDefault(_Banner);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23376,7 +23380,6 @@ var App = function (_React$Component) {
 
         _this.state = {
             isLoggedIn: false,
-            username: '',
             hasAuth: false
         };
 
@@ -23464,10 +23467,14 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(_MasterPage2.default, { isLoggedIn: this.state.isLoggedIn,
-                hasAuth: this.state.hasAuth,
-                onLogin: this.handleLogin,
-                onLogout: this.handleLogout });
+            return _react2.default.createElement(
+                'div',
+                { id: 'container' },
+                _react2.default.createElement(_Banner2.default, { onLogout: this.handleLogout, isLoggedIn: this.state.isLoggedIn }),
+                _react2.default.createElement(_MasterPage2.default, { isLoggedIn: this.state.isLoggedIn,
+                    hasAuth: this.state.hasAuth,
+                    onLogin: this.handleLogin })
+            );
         }
     }]);
 
@@ -23500,21 +23507,17 @@ var _Home = __webpack_require__(77);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _WrongPath = __webpack_require__(79);
+var _WrongPath = __webpack_require__(78);
 
 var _WrongPath2 = _interopRequireDefault(_WrongPath);
 
-var _LoginPage = __webpack_require__(80);
+var _LoginPage = __webpack_require__(79);
 
 var _LoginPage2 = _interopRequireDefault(_LoginPage);
 
-var _LoadingPage = __webpack_require__(81);
+var _LoadingPage = __webpack_require__(80);
 
 var _LoadingPage2 = _interopRequireDefault(_LoadingPage);
-
-var _Banner = __webpack_require__(82);
-
-var _Banner2 = _interopRequireDefault(_Banner);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23538,39 +23541,22 @@ var MasterPage = function (_React$Component) {
         value: function render() {
             var _props = this.props,
                 isLoggedIn = _props.isLoggedIn,
-                hasAuth = _props.hasAuth,
-                onLogin = _props.onLogin,
-                onLogout = _props.onLogout;
+                hasAuth = _props.hasAuth;
 
 
             if (hasAuth) {
                 if (isLoggedIn) {
                     return _react2.default.createElement(
-                        'div',
-                        { id: 'container' },
-                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
-                        _react2.default.createElement(
-                            _reactRouterDom.Switch,
-                            null,
-                            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
-                            _react2.default.createElement(_reactRouterDom.Route, { component: _WrongPath2.default })
-                        )
+                        _reactRouterDom.Switch,
+                        null,
+                        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
+                        _react2.default.createElement(_reactRouterDom.Route, { component: _WrongPath2.default })
                     );
                 } else {
-                    return _react2.default.createElement(
-                        'div',
-                        { id: 'container' },
-                        _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
-                        _react2.default.createElement(_LoginPage2.default, { onLogin: onLogin })
-                    );
+                    return _react2.default.createElement(_LoginPage2.default, { onLogin: this.props.onLogin });
                 }
             } else {
-                return _react2.default.createElement(
-                    'div',
-                    { id: 'container' },
-                    _react2.default.createElement(_Banner2.default, { onLogout: onLogout, isLoggedIn: isLoggedIn }),
-                    _react2.default.createElement(_LoadingPage2.default, null)
-                );
+                return _react2.default.createElement(_LoadingPage2.default, null);
             }
         }
     }]);
@@ -23598,7 +23584,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Post = __webpack_require__(78);
+var _Post = __webpack_require__(82);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -23721,129 +23707,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Comment = function Comment(props) {
-    var _props$data = props.data,
-        id = _props$data.id,
-        user = _props$data.user,
-        content = _props$data.content,
-        date = _props$data.date;
-
-
-    return _react2.default.createElement(
-        'p',
-        { className: 'comment' },
-        user.username,
-        ' says : ',
-        content
-    );
-};
-
-var Post = function (_React$Component) {
-    _inherits(Post, _React$Component);
-
-    function Post(props) {
-        _classCallCheck(this, Post);
-
-        var _this = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
-
-        _this.state = {
-            comment: ''
-        };
-
-        _this.handleSubmitComment = _this.handleSubmitComment.bind(_this);
-        _this.handleCommentChange = _this.handleCommentChange.bind(_this);
-        return _this;
-    }
-
-    _createClass(Post, [{
-        key: 'handleSubmitComment',
-        value: function handleSubmitComment(event) {
-            event.preventDefault();
-
-            /* SUBMIT COMMENT TODO */
-            window.alert('Posted a comment:\'' + this.state.comment + '\'');
-        }
-    }, {
-        key: 'handleCommentChange',
-        value: function handleCommentChange(event) {
-            this.setState({ comment: event.target.value });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props$data2 = this.props.data,
-                id = _props$data2.id,
-                user = _props$data2.user,
-                date = _props$data2.date,
-                content = _props$data2.content,
-                comments = _props$data2.comments;
-
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'post' },
-                _react2.default.createElement(
-                    'h3',
-                    null,
-                    content
-                ),
-                _react2.default.createElement(
-                    'h5',
-                    null,
-                    'Posted ',
-                    new Date(date).toLocaleDateString(),
-                    ' at ',
-                    new Date(date).toLocaleTimeString()
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { id: 'comments' },
-                    comments.map(function (c) {
-                        return _react2.default.createElement(Comment, { data: c, key: c.id });
-                    })
-                ),
-                _react2.default.createElement(
-                    'form',
-                    { onSubmit: this.handleSubmitComment },
-                    _react2.default.createElement('input', { className: 'addcomment',
-                        placeholder: 'Add a comment...',
-                        onChange: this.handleCommentChange,
-                        value: this.state.comment })
-                )
-            );
-        }
-    }]);
-
-    return Post;
-}(_react2.default.Component);
-
-exports.default = Post;
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var WrongPath = function (_React$Component) {
     _inherits(WrongPath, _React$Component);
 
@@ -23870,7 +23733,7 @@ var WrongPath = function (_React$Component) {
 exports.default = WrongPath;
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23978,7 +23841,7 @@ var LoginPage = function (_React$Component) {
 exports.default = LoginPage;
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24028,7 +23891,7 @@ var LoginPage = function (_React$Component) {
 exports.default = LoginPage;
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24066,9 +23929,7 @@ var Banner = function (_React$Component) {
     _createClass(Banner, [{
         key: 'render',
         value: function render() {
-            var _props = this.props,
-                isLoggedIn = _props.isLoggedIn,
-                onLogout = _props.onLogout;
+            var isLoggedIn = this.props.isLoggedIn;
 
 
             return _react2.default.createElement(
@@ -24088,7 +23949,7 @@ var Banner = function (_React$Component) {
                     null,
                     _react2.default.createElement(
                         _reactRouterDom.Link,
-                        { to: '/', onClick: onLogout },
+                        { to: '/', onClick: this.props.onLogout },
                         'Log out'
                     )
                 ) : null
@@ -24100,6 +23961,121 @@ var Banner = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Banner;
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Comment = function Comment(props) {
+    var text = props.data.text;
+
+    return _react2.default.createElement(
+        'p',
+        { className: 'comment' },
+        text
+    );
+};
+
+var Post = function (_React$Component) {
+    _inherits(Post, _React$Component);
+
+    function Post(props) {
+        _classCallCheck(this, Post);
+
+        var _this = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+
+        _this.state = {
+            comment: ''
+        };
+
+        _this.handleSubmitComment = _this.handleSubmitComment.bind(_this);
+        _this.handleCommentChange = _this.handleCommentChange.bind(_this);
+        return _this;
+    }
+
+    _createClass(Post, [{
+        key: 'handleSubmitComment',
+        value: function handleSubmitComment(event) {
+            event.preventDefault();
+
+            /* SUBMIT COMMENT TODO */
+            window.alert('Posted a comment:\'' + this.state.comment + '\'');
+        }
+    }, {
+        key: 'handleCommentChange',
+        value: function handleCommentChange(event) {
+            this.setState({ comment: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props$data = this.props.data,
+                id = _props$data.id,
+                date = _props$data.date,
+                text = _props$data.text,
+                comments = _props$data.comments;
+
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'post' },
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    text
+                ),
+                _react2.default.createElement(
+                    'h5',
+                    null,
+                    'Posted ',
+                    new Date(date).toLocaleDateString(),
+                    ' at ',
+                    new Date(date).toLocaleTimeString()
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { id: 'comments' },
+                    comments.map(function (c) {
+                        return _react2.default.createElement(Comment, { data: c, key: c.id });
+                    })
+                ),
+                _react2.default.createElement(
+                    'form',
+                    { onSubmit: this.handleSubmitComment },
+                    _react2.default.createElement('input', { className: 'addcomment',
+                        placeholder: 'Add a comment...',
+                        onChange: this.handleCommentChange,
+                        value: this.state.comment })
+                )
+            );
+        }
+    }]);
+
+    return Post;
+}(_react2.default.Component);
+
+exports.default = Post;
 
 /***/ })
 /******/ ]);

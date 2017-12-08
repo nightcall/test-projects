@@ -5,19 +5,11 @@ const pug = require('pug');
 const app = express();
 
 /*** USER DATABASE ***/
-const Database = require('./Database.js');
-let db = new Database;
-
-db.addUser({username: 'jon', password: '1234'});
-db.addUser({username: 'sara', password: '1234'});
-db.addUser({username: 'clementine', password: '1234'});
-
-db.addPost('jon', 'Hey feelin gr8 today :) and u ?');
-db.addPost('sara', 'YEAAAAAAAAAAAAH !!!!!! (L)');
-db.addPost('jon', 'A fond les ballons wesh');
-db.addComment(2, 'sara', 'vazy mais ferme ta gueule aussi');
-db.addComment(2, 'jon', 'jalouse ?');
-db.addComment(2, 'sara', 'ke dalle t un boloss c tou');
+const UserDatabase = require('./Users.js');
+let userDB = new UserDatabase;
+userDB.addUser({ username: 'john', password: '1234' });
+userDB.addUser({ username: 'sara', password: '1234' });
+userDB.addUser({ username: 'oliver', password: '1234' });
 
 
 /*** SET UP ***/
@@ -49,13 +41,13 @@ app.post('/login', (req, res) => {
     } = req.body;
 
     if(username && password) {
-        const user = db.users.find(u => u.username == username
-            && u.password == password);
-
-        if(user != 'undefined') {
-            logged = true;
-            req.session.userID = user.id;
-        }
+        userDB.users.forEach(u => {
+            if(u.username == username
+            && u.password == password) {
+                logged = true;
+                req.session.userID = u.id;
+            }
+        });
     }
 
     if(logged) console.log(`${username} logged in successfully !`);
@@ -78,7 +70,7 @@ app.post('/logout', (req, res) => {
 
 /* AM I LOGGED IN OR NOT ? */
 app.post('/auth', (req, res) => {
-    
+
     // Send Auth
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
@@ -92,14 +84,14 @@ app.post('/newsfeed', (req, res) => {
     if(req.session.userID != 'undefined') {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({
-            posts: db.posts,
+            posts: userDB.users[0].posts,
             canLoadMore: true
         }));
     }
 });
 
 /*** TESTING ZONE ***/
-
+console.log(userDB.users[0].posts[0].comments);
 
 /*** REQUESTS ***/
 app.use((req, res) => {
