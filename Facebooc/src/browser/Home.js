@@ -1,6 +1,15 @@
 import React from 'react';
 import Post from './Post';
 
+const SubmitPost = (props) => {
+    return(
+        <form id='submitpost'>
+            <textarea placeholder='How are you feeling today ?' />
+            <button>Submit !</button>
+        </form>
+    );
+};
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -44,7 +53,8 @@ export default class Home extends React.Component {
     render() {
         return(
             <div id='home'>
-                <h1>Home</h1>
+                <h1>My Newsfeed</h1>
+                <SubmitPost />
                 {this.state.posts.map((p, i) => <Post data={p} key={p.id} />)}
             </div>
         );

@@ -23596,6 +23596,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var SubmitPost = function SubmitPost(props) {
+    return _react2.default.createElement(
+        'form',
+        { id: 'submitpost' },
+        _react2.default.createElement('textarea', { placeholder: 'How are you feeling today ?' }),
+        _react2.default.createElement(
+            'button',
+            null,
+            'Submit !'
+        )
+    );
+};
+
 var Home = function (_React$Component) {
     _inherits(Home, _React$Component);
 
@@ -23654,8 +23667,9 @@ var Home = function (_React$Component) {
                 _react2.default.createElement(
                     'h1',
                     null,
-                    'Home'
+                    'My Newsfeed'
                 ),
+                _react2.default.createElement(SubmitPost, null),
                 this.state.posts.map(function (p, i) {
                     return _react2.default.createElement(_Post2.default, { data: p, key: p.id });
                 })
@@ -23978,7 +23992,7 @@ var Comment = function Comment(props) {
 
     return _react2.default.createElement(
         'p',
-        null,
+        { className: 'comment' },
         text
     );
 };
@@ -23989,10 +24003,31 @@ var Post = function (_React$Component) {
     function Post(props) {
         _classCallCheck(this, Post);
 
-        return _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+
+        _this.state = {
+            comment: ''
+        };
+
+        _this.handleSubmitComment = _this.handleSubmitComment.bind(_this);
+        _this.handleCommentChange = _this.handleCommentChange.bind(_this);
+        return _this;
     }
 
     _createClass(Post, [{
+        key: 'handleSubmitComment',
+        value: function handleSubmitComment(event) {
+            event.preventDefault();
+
+            /* SUBMIT COMMENT TODO */
+            window.alert('Posted a comment:\'' + this.state.comment + '\'');
+        }
+    }, {
+        key: 'handleCommentChange',
+        value: function handleCommentChange(event) {
+            this.setState({ comment: event.target.value });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _props$data = this.props.data,
@@ -24024,6 +24059,14 @@ var Post = function (_React$Component) {
                     comments.map(function (c) {
                         return _react2.default.createElement(Comment, { data: c, key: c.id });
                     })
+                ),
+                _react2.default.createElement(
+                    'form',
+                    { onSubmit: this.handleSubmitComment },
+                    _react2.default.createElement('input', { className: 'addcomment',
+                        placeholder: 'Add a comment...',
+                        onChange: this.handleCommentChange,
+                        value: this.state.comment })
                 )
             );
         }
