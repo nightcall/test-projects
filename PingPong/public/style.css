@@ -1,0 +1,25 @@
+canvas {              
+    border: 1px solid #deaa67;
+    border-bottom: 5px solid #deaa67;
+}
+
+#container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#above {
+    position: absolute;
+    background-color: white;
+    z-index: 50;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

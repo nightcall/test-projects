@@ -1,11 +1,14 @@
 import express from 'express';
 import url from 'url';
 import multer from 'multer';
+import bodyParser from 'body-parser';
+import knex from './knex';
 
 const app = express();
 
 /*** MIDDLEWARES ***/
 app.use(express.static(__dirname + '/../../public'));
+app.use(bodyParser.json());
 
 /*** UPLOAD ***/
 const storage = multer.diskStorage({
@@ -42,10 +45,27 @@ app.post('/upload', (req, res) => {
     });
 });
 
+app.post('/post', (req, res) => {
+    knex.select('*').from('images').where('id', '=', req.body.id)
+    .then(post => {
+        knex.select('*').from('comments').innerJoin('images', 'comments.imageId', '=', 'images.id')
+        .then(comments => {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({path: post[0].path, comments: comments}));
+        });
+    });
+});
+
+app.post('/comment', (req, res) => {
+    knex.insert({imageId: req.body.id, content: req.body.comment}).into('comments')
+    .then(row => {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send(req.body.comment);
+    });
+});
+
 /*** UNIVERSAL RENDERER ***/
 app.get('*', (req, res) => {
-    console.log(url.parse(req.url).pathname);
-
     res.setHeader('Content-Type', 'text/html');
     res.send(`
         <!DOCTYPE html>
