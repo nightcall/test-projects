@@ -1,14 +1,22 @@
 canvas {              
     border: 1px solid #deaa67;
-    border-bottom: 5px solid #deaa67;
+    border-bottom: 10px solid #deaa67;
 }
 
 #container {
     width: 100vw;
     height: 100vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+
+#score {
+    width: 700px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
