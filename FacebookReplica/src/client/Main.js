@@ -5,12 +5,12 @@ import App from './App';
 
 // Will be passed later through server-side rendering
 const initialState = {
-	isLoggedIn: false,
-	username: ''
+    isLoggedIn: true,
+    username: 'sara'
 };
 
 // PUT HYDRATE WHEN RENDERED SERVER SIDE
 ReactDOM.render(<BrowserRouter>
-					<App {...initialState} />
-				</BrowserRouter>,
-				document.getElementById('root'));
+                    <App {...initialState} />
+                </BrowserRouter>,
+                document.getElementById('root'));

@@ -58,7 +58,7 @@ app.post('/postslist', (req, res) => {
         });
     } else {
         res.setHeader('Content-Type', 'text/plain');
-        res.send('not connected');
+        res.send('not connected, cannot get post list');
     }
 });
 
@@ -75,7 +75,7 @@ app.post('/addpost', (req, res) => {
         knex.insert(newPost, 'id')
         .into('Posts')
         .then(id => {
-            res.setHeader('Content-Type', 'applicatin/json');
+            res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({
                 id: id,
                 comments: [],
@@ -85,7 +85,63 @@ app.post('/addpost', (req, res) => {
         })
     } else {
         res.setHeader('Content-Type', 'text/plain');
-        res.send('not connected');
+        res.send('not connected, cannot add post');
+    }
+});
+
+app.post('/login', (req, res) => {
+    // A CHANGER !!!!!
+    //if(!!req.session.userID) {
+    if(true) {
+        const {
+            username,
+            password
+        } = req.body;
+
+        knex.select('*')
+        .from('Users')
+        .where({username: username, password: password})
+        .then(results => {
+            if(results.length) {
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({
+                    username: username
+                }));
+            } else {
+                res.status(500);
+                res.end();
+            }
+        })
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send('already connected dumbass');
+    }
+});
+
+app.post('/addcomment', (req, res) => {
+    // A CHANGER !!!!!
+    //if(req.session.userID) {
+    if(true) {
+        const newComment = {
+            userid: req.body.userid,
+            postid: req.body.postid,
+            content: req.body.content,
+            timestamp: Date.now()
+        };
+
+        knex.insert(newComment, 'id')
+        .into('Comments')
+        .then(id => {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({
+                id: id,
+                username: 'sara',
+                ...newComment
+            }));
+        })
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send('not connected, cannot add post');
     }
 });
 

@@ -4,29 +4,29 @@ import PostList from './PostList';
 import ChatComponent from './ChatComponent';
 
 export default class HomePage extends React.Component {
-	constructor(props) {
-		super(props);
-	}
+    constructor(props) {
+        super(props);
+    }
 
-	componentDidMount() {
-		console.log('HomePage mounted')
-	}
+    componentDidMount() {
+        console.log('HomePage mounted')
+    }
 
-	shouldComponentUpdate() {
-		return true;
-	}
+    shouldComponentUpdate() {
+        return true;
+    }
 
-	render() {
-		return(
-			<div id='full-container'>
-				<div className='flex-container container_1024'>
-					<div id='sidebar-container'>
-					[sidebar]
-					</div>
-					<PostList />
-				</div>
-				<ChatComponent />
-			</div>
-		);
-	}
+    render() {
+        return(
+            <div id='full-container'>
+                <div className='flex-container container_1024'>
+                    <div id='sidebar-container'>
+                    [sidebar]
+                    </div>
+                    <PostList />
+                </div>
+                <ChatComponent />
+            </div>
+        );
+    }
 }
