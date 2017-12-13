@@ -26,71 +26,72 @@ app.use(session({
 
 /** REQUESTS **/
 app.post('/postslist', (req, res) => {
-	// A CHANGER !!!!!
-	//if(req.session.userID) {
-	if(true) {
+    // A CHANGER !!!!!
+    //if(req.session.userID) {
+    if(true) {
 
-		// GET POST LIST [DIRTY CODE!!]
-		let posts;
-		knex.select('Posts.*', 'Users.username').from('Posts')
-		.innerJoin('Users', 'Posts.userid', 'Users.id')
-		.orderBy('id', 'desc')
-		.then(data => {
-			posts = data;
+        // GET POST LIST [DIRTY CODE!!]
+        let posts;
+        knex.select('Posts.*', 'Users.username').from('Posts')
+        .innerJoin('Users', 'Posts.userid', 'Users.id')
+        .orderBy('id', 'desc')
+        .then(data => {
+            posts = data;
 
-			for(let p of posts) {
-				p.comments = [];
-			}
+            for(let p of posts) {
+                p.comments = [];
+            }
 
-			return knex.select('Comments.*', 'Users.username').from('Comments')
-				.innerJoin('Users', 'Comments.userid', 'Users.id');
-		})
-		.then(comments => {
-			for(let c of comments) {
-				let post = posts.find(p => c.postid == p.id);
-				post.comments.push(c);
-			}
+            return knex.select('Comments.*', 'Users.username').from('Comments')
+                .innerJoin('Users', 'Comments.userid', 'Users.id');
+        })
+        .then(comments => {
+            for(let c of comments) {
+                let post = posts.find(p => c.postid == p.id);
+                
+                if(post)
+                    post.comments.push(c);
+            }
 
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify(posts));
-		});
-	} else {
-		res.setHeader('Content-Type', 'text/plain');
-		res.send('not connected');
-	}
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(posts));
+        });
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send('not connected');
+    }
 });
 
 app.post('/addpost', (req, res) => {
-	// A CHANGER !!!!!
-	//if(req.session.userID) {
-	if(true) {
-		const newPost = {
-			userid: req.body.userid,
-			content: req.body.content,
-			timestamp: Date.now()
-		};
+    // A CHANGER !!!!!
+    //if(req.session.userID) {
+    if(true) {
+        const newPost = {
+            userid: req.body.userid,
+            content: req.body.content,
+            timestamp: Date.now()
+        };
 
-		knex.insert(newPost, 'id')
-		.into('Posts')
-		.then(id => {
-			console.log(id);
-			res.setHeader('Content-Type', 'applicatin/json');
-			res.send(JSON.stringify({
-				id: id,
-				comments: [],
-				username: 'sara',
-				...newPost
-			}));
-		})
-	} else {
-		res.setHeader('Content-Type', 'text/plain');
-		res.send('not connected');
-	}
+        knex.insert(newPost, 'id')
+        .into('Posts')
+        .then(id => {
+            res.setHeader('Content-Type', 'applicatin/json');
+            res.send(JSON.stringify({
+                id: id,
+                comments: [],
+                username: 'sara',
+                ...newPost
+            }));
+        })
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send('not connected');
+    }
 });
 
 app.get('*', (req, res) => {
-	res.setHeader('Content-Type', 'text/html');
-	res.render('layout.pug');
+    res.setHeader('Content-Type', 'text/html');
+    res.render('layout.pug');
 });
 
 app.listen(8888);
@@ -119,19 +120,19 @@ app.use(bodyParser.urlencoded ({
 }));
 
 app.get('*', (req, res) => {
-	const context = {};
-	const html = ReactDOMServer.renderToString(
-		<StaticRouter location={req.url} context={context} >
-			<App />
-		</StaticRouter>);
+    const context = {};
+    const html = ReactDOMServer.renderToString(
+        <StaticRouter location={req.url} context={context} >
+            <App />
+        </StaticRouter>);
 
-	if(context.url) {
-		res.writeHead(302);
-		res.end();
-	} else {
-		res.setHeader('Content-Type', 'text/html');
-		res.render('layout.pug', {renderedHTML: html});
-	}
+    if(context.url) {
+        res.writeHead(302);
+        res.end();
+    } else {
+        res.setHeader('Content-Type', 'text/html');
+        res.render('layout.pug', {renderedHTML: html});
+    }
 });
 
 app.listen(8888);

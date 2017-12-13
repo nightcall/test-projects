@@ -29,7 +29,9 @@ export default class PostList extends React.PureComponent {
 		})
 		.then(data => data.json())
 		.then(posts => {
-			this.setState(prevState => ({posts: prevState.posts.concat(posts)}));
+			this.setState(prevState => ({
+				posts: [...prevState.posts, ...posts]
+			}));
 		});
 	}
 

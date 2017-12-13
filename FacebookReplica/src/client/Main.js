@@ -5,8 +5,8 @@ import App from './App';
 
 // Will be passed later through server-side rendering
 const initialState = {
-	isLoggedIn: true,
-	username: 'sara'
+	isLoggedIn: false,
+	username: ''
 };
 
 // PUT HYDRATE WHEN RENDERED SERVER SIDE
