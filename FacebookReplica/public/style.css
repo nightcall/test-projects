@@ -1,0 +1,89 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #e8eaee;
+}
+
+nav {
+	background-color: #4267b2;
+	height: 45px;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+nav img {
+	width: 35px;
+}
+
+.container_1024 {
+	width: 1024px;
+	margin: auto;
+}
+
+#nav-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#nav-container h3 a {
+	color: white;
+	text-decoration: none;
+}
+
+#nav-container h3 a:hover {
+	color: grey;
+	text-decoration: none;
+}
+
+.flex-container {
+	margin-top: 24px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+#nav-right {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#nav-right p, h3 {
+	margin-bottom: 0;
+}
+
+#body-container {
+	width: 700px;
+}
+
+#sidebar-container {
+	width: 300px;
+	background-color: white;
+}
+
+#post-input-container textarea {
+	width: 100%;
+	height: 100px;
+	resize: none;
+}
+
+#post-input-container button {
+	background-color: #4267b2;
+	margin-top: 10px;
+}
+
+.post-container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: white;
+	padding: 10px;
+}
