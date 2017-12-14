@@ -1,7 +1,6 @@
 import React from 'react';
 import PostInput from './PostInput';
 import PostList from './PostList';
-import ChatComponent from './ChatComponent';
 
 export default class HomePage extends React.Component {
     constructor(props) {
@@ -18,15 +17,12 @@ export default class HomePage extends React.Component {
 
     render() {
         return(
-            <div id='full-container'>
-                <div className='flex-container container_1024'>
-                    <div id='sidebar-container'>
-                    [sidebar]
-                    </div>
+            <React.Fragment>
+                <div id='sidebar-container'></div>
+                <div id='body-container'>
                     <PostList />
                 </div>
-                <ChatComponent />
-            </div>
+            </React.Fragment>
         );
     }
 }

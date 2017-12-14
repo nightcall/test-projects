@@ -24,7 +24,6 @@ export default class Post extends React.PureComponent {
             credentials: 'same-origin',
             body: JSON.stringify({
                 postid: id,
-                userid: 1, // CHANGER -> on recupere cote serveur
                 content: comment
             })
         })

@@ -4,6 +4,10 @@ import url from 'url';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import knex from './knex';
+import ReactDOMServer from 'react-dom/server';
+import { StaticRouter } from 'react-router';
+import React from 'react';
+import App from '../client/App';
 
 const app = express();
 
@@ -65,9 +69,10 @@ app.post('/postslist', (req, res) => {
 app.post('/addpost', (req, res) => {
     // A CHANGER !!!!!
     //if(req.session.userID) {
-    if(true) {
+    if(req.session.userid
+    && req.session.username) {
         const newPost = {
-            userid: req.body.userid,
+            userid: req.session.userid,
             content: req.body.content,
             timestamp: Date.now()
         };
@@ -79,7 +84,7 @@ app.post('/addpost', (req, res) => {
             res.send(JSON.stringify({
                 id: id,
                 comments: [],
-                username: 'sara',
+                username: req.session.username,
                 ...newPost
             }));
         })
@@ -90,9 +95,7 @@ app.post('/addpost', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    // A CHANGER !!!!!
-    //if(!!req.session.userID) {
-    if(true) {
+    if(!req.session.user) {
         const {
             username,
             password
@@ -103,6 +106,8 @@ app.post('/login', (req, res) => {
         .where({username: username, password: password})
         .then(results => {
             if(results.length) {
+                req.session.userid = results[0].id;
+                req.session.username = results[0].username;
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({
                     username: username
@@ -118,12 +123,21 @@ app.post('/login', (req, res) => {
     }
 });
 
+app.post('/logout', (req, res) => {
+    if(req.session.userid) {
+        req.session.destroy();
+        res.status(200);
+        res.end();
+    }
+});
+
 app.post('/addcomment', (req, res) => {
     // A CHANGER !!!!!
     //if(req.session.userID) {
-    if(true) {
+    if(req.session.userid
+    && req.session.username) {
         const newComment = {
-            userid: req.body.userid,
+            userid: req.session.userid,
             postid: req.body.postid,
             content: req.body.content,
             timestamp: Date.now()
@@ -135,7 +149,7 @@ app.post('/addcomment', (req, res) => {
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({
                 id: id,
-                username: 'sara',
+                username: req.session.username,
                 ...newComment
             }));
         })
@@ -146,51 +160,37 @@ app.post('/addcomment', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
-    res.render('layout.pug');
-});
+    let initialState = {
+        isLoggedIn: false,
+        username: 'Default'
+    };
 
-app.listen(8888);
+    if(req.session.userid
+    && req.session.username) {
+        // TODO SEND USER DATA
+        initialState = {
+            isLoggedIn: true,
+            username: req.session.username
+        };
+    }
 
-/*
-
-import express from 'express';
-import pug from 'pug';
-import url from 'url';
-import bodyParser from 'body-parser';
-import ReactDOMServer from 'react-dom/server';
-import { StaticRouter } from 'react-router';
-import React from 'react';
-import App from '../client/App';
-
-const app = express();
-
-app.set('view-engine', 'pug');
-app.set('views', __dirname + '/views');
-app.disable('x-powered-by');
-
-app.use(express.static(__dirname + '/../../public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded ({
-    extended: true
-}));
-
-app.get('*', (req, res) => {
     const context = {};
     const html = ReactDOMServer.renderToString(
         <StaticRouter location={req.url} context={context} >
-            <App />
+            <App {...initialState} />
         </StaticRouter>);
 
     if(context.url) {
+        console.log('REDIRECTION');
         res.writeHead(302);
         res.end();
     } else {
         res.setHeader('Content-Type', 'text/html');
-        res.render('layout.pug', {renderedHTML: html});
+        res.render('layout.pug', {
+            renderedHTML: html,
+            initialState: `const initialState = ${JSON.stringify(initialState)};`
+        });
     }
 });
 
 app.listen(8888);
-
-*/

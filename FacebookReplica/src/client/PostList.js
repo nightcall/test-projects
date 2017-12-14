@@ -41,10 +41,10 @@ export default class PostList extends React.PureComponent {
 
     render() {
         return(
-            <div id='body-container'>
+            <React.Fragment>
                 <PostInput onSubmitPost={this.handleSubmitPost} />
                 {this.state.posts.map(p => <Post data={p} key={p.id} />)}
-            </div>
+            </React.Fragment>
         );
     }
 }

@@ -1,9 +1,9 @@
 doctype html
 html
     head
-        link(rel='stylesheet' href='/bootstrap.min.css')
         link(rel='stylesheet' href='/style.css')
     body
-        div#root
+        div#root!= renderedHTML
+        script!= initialState
         script(src='/bundle.js')
         

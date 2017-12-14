@@ -33,6 +33,11 @@ export default class NavBar extends React.PureComponent {
         };
     }
 
+    handleLogout = (event) => {
+        event.preventDefault();
+        this.props.onLogout();
+    }
+
     handleLogin = (event) => {
         event.preventDefault();
 
@@ -65,32 +70,30 @@ export default class NavBar extends React.PureComponent {
 
         return(
             <nav>
-                <div id="nav-full-container">
-                    <div id='nav-container' className='container_1024'>
-                        <div id='nav-left'>
-                            <Logo />
-                            {isLoggedIn ? <SearchBar /> : null}
-                        </div>
-                        <div id='nav-right'>
-                            {isLoggedIn ? (
-                                <React.Fragment>
-                                    <h3><Link to={`/${username}`} >{username}</Link></h3>
-                                    <Notifications />
-                                    <p>Logout</p>
-                                </React.Fragment>
-                            ) : (
-                                <form onSubmit={this.handleLogin} >
-                                    <input placeholder='Username'
-                                        value={this.state.usernameValue}
-                                        onChange={this.handleUsernameChange} />
-                                    <input placeholder='Password'
-                                        value={this.state.passwordValue}
-                                        type='password'
-                                        onChange={this.handlePasswordChange} />
-                                    <input type='submit' value='Log in' />
-                                </form>
-                            )}
-                        </div>
+                <div id='nav-container'>
+                    <div id='nav-left'>
+                        <Logo />
+                        {isLoggedIn ? <SearchBar /> : null}
+                    </div>
+                    <div id='nav-right'>
+                        {isLoggedIn ? (
+                            <React.Fragment>
+                            <h3><Link to={`/${username}`} >{username}</Link></h3>
+                            <Notifications />
+                            <a href='#' onClick={this.handleLogout} >Log out</a>
+                            </React.Fragment>
+                        ) : (
+                            <form onSubmit={this.handleLogin} >
+                                <input placeholder='Username'
+                                    value={this.state.usernameValue}
+                                    onChange={this.handleUsernameChange} />
+                                <input placeholder='Password'
+                                    value={this.state.passwordValue}
+                                    type='password'
+                                    onChange={this.handlePasswordChange} />
+                                <input type='submit' value='Log in' />
+                            </form>
+                        )}
                     </div>
                 </div>
             </nav>

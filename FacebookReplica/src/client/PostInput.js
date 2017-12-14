@@ -27,8 +27,6 @@ export default class PostInput extends React.PureComponent {
             method: 'POST',
             credentials: 'same-origin',
             body: JSON.stringify({
-                // changer username + userid car on les recup coté server via session
-                userid: 1,
                 content: this.state.value
             })
         })

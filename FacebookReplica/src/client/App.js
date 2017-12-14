@@ -27,6 +27,24 @@ export default class App extends React.Component {
         };
     }
 
+    handleLogout = () => {
+        fetch('/logout', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            credentials: 'same-origin'
+        })
+        .then(() => {
+            this.setState({
+                isLoggedIn: false,
+                username: ''
+            });
+        })
+        .catch(err => console.log('failed to logout'));
+    }
+
     handleLogin = (username, password) => {
         fetch('/login', {
             headers: {
@@ -56,7 +74,9 @@ export default class App extends React.Component {
         } = this.state;
 
         return(
-            <Layout {...this.state} onLogin={this.handleLogin} >
+            <Layout {...this.state}
+                onLogin={this.handleLogin}
+                onLogout={this.handleLogout} >
                 {isLoggedIn ? (
                     <Switch>
                         {/* unique timestamp prop is for always re-rendering the component */}
